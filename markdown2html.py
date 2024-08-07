@@ -38,7 +38,8 @@ if __name__ == "__main__":
                 line = re.sub(r'^(#{4}) (.*)', r'<h4>\2</h4>', line)
                 line = re.sub(r'^(#{5}) (.*)', r'<h5>\2</h5>', line)
                 line = re.sub(r'^(#{6}) (.*)', r'<h6>\2</h6>', line)
-                # Improve markdown2html.py by parsing Unordered listing syntax for generating HTML:
+                # Improve markdown2html.py by parsing Unordered listing syntax
+                # for generating HTML:
                 # Syntax: (you can assume it will be strictly this syntax)
                 # - Hello
                 # - Bye
@@ -57,7 +58,6 @@ if __name__ == "__main__":
                         html_f.write('</ul>\n')
                         in_list = False
                 html_f.write(line)
-            
             # Close the list if the file ends while in_list is True
             if in_list:
                 html_f.write('</ul>\n')
