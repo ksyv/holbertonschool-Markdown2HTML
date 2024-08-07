@@ -30,7 +30,8 @@ if __name__ == "__main__":
     # syntax for generating HTML heading level
     with open(markdown_file, "r") as md_f:
         with open(html_file, "w") as html_f:
-            in_list = False
+            in_ul_list = False
+            in_ol_list = False
             for line in md_f:
                 line = re.sub(r'^(#{1}) (.*)', r'<h1>\2</h1>', line)
                 line = re.sub(r'^(#{2}) (.*)', r'<h2>\2</h2>', line)
@@ -49,16 +50,45 @@ if __name__ == "__main__":
                 # <li>Bye</li>
                 # </ul>
                 if re.match(r'^- ', line):
-                    if not in_list:
+                    if not in_ul_list:
+                        if in_ol_list:
+                            html_f.write('</ol>\n')
+                            in_ol_list = False
                         html_f.write('<ul>\n')
-                        in_list = True
+                        in_ul_list = True
                     line = re.sub(r'^- (.*)', r'<li>\1</li>', line)
                 else:
-                    if in_list:
+                    if in_ul_list:
                         html_f.write('</ul>\n')
-                        in_list = False
+                        in_ul_list = False
+                # Improve markdown2html.py by parsing Ordered listing syntax for generating HTML:
+                # Syntax: (you can assume it will be strictly this syntax)
+                # Markdown:
+                # * Hello
+                # * Bye
+                # HTML generated:
+                # <ol>
+                # <li>Hello</li>
+                # <li>Bye</li>
+                # </ol>
+                if re.match(r'^\* ', line):
+                    if not in_ol_list:
+                        if in_ul_list:
+                            html_f.write('</ul>\n')
+                            in_ul_list = False
+                        html_f.write('<ol>\n')
+                        in_ol_list = True
+                    line = re.sub(r'^\* (.*)', r'<li>\1</li>', line)
+                else:
+                    if in_ol_list:
+                        html_f.write('</ol>\n')
+                        in_ol_list = False
+                
                 html_f.write(line)
             # Close the list if the file ends while in_list is True
-            if in_list:
+             # Close any open lists at the end of the file
+            if in_ul_list:
                 html_f.write('</ul>\n')
+            if in_ol_list:
+                html_f.write('</ol>\n')
     sys.exit(0)
