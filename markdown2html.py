@@ -12,7 +12,6 @@ print in STDER Missing <filename> and exit 1
 Otherwise, print nothing and exit 0"""
 import sys
 import os
-import markdown
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
