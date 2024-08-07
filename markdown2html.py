@@ -26,7 +26,8 @@ if __name__ == "__main__":
         sys.exit(1)
 
     html_file = sys.argv[2]
-    #Improve markdown2html.py by parsing Headings Markdown syntax for generating HTML heading level
+    # Improve markdown2html.py by parsing Headings Markdown
+    # syntax for generating HTML heading level
     with open(markdown_file, "r") as md_f:
         with open(html_file, "w") as html_f:
             for line in md_f:
@@ -38,5 +39,3 @@ if __name__ == "__main__":
                 line = re.sub(r'^(#{6}) (.*)', r'<h6>\2</h6>', line)
                 html_f.write(line)
     sys.exit(0)
-
-
