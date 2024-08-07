@@ -30,6 +30,7 @@ if __name__ == "__main__":
     # syntax for generating HTML heading level
     with open(markdown_file, "r") as md_f:
         with open(html_file, "w") as html_f:
+            in_list = False
             for line in md_f:
                 line = re.sub(r'^(#{1}) (.*)', r'<h1>\2</h1>', line)
                 line = re.sub(r'^(#{2}) (.*)', r'<h2>\2</h2>', line)
@@ -37,5 +38,27 @@ if __name__ == "__main__":
                 line = re.sub(r'^(#{4}) (.*)', r'<h4>\2</h4>', line)
                 line = re.sub(r'^(#{5}) (.*)', r'<h5>\2</h5>', line)
                 line = re.sub(r'^(#{6}) (.*)', r'<h6>\2</h6>', line)
+                # Improve markdown2html.py by parsing Unordered listing syntax for generating HTML:
+                # Syntax: (you can assume it will be strictly this syntax)
+                # - Hello
+                # - Bye
+                # Html generated:
+                # <ul>
+                # <li>Hello</li>
+                # <li>Bye</li>
+                # </ul>
+                if re.match(r'^- ', line):
+                    if not in_list:
+                        html_f.write('<ul>\n')
+                        in_list = True
+                    line = re.sub(r'^- (.*)', r'<li>\1</li>', line)
+                else:
+                    if in_list:
+                        html_f.write('</ul>\n')
+                        in_list = False
                 html_f.write(line)
+            
+            # Close the list if the file ends while in_list is True
+            if in_list:
+                html_f.write('</ul>\n')
     sys.exit(0)
