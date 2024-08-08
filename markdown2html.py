@@ -61,7 +61,8 @@ if __name__ == "__main__":
                     if in_ul_list:
                         html_f.write('</ul>\n')
                         in_ul_list = False
-                # Improve markdown2html.py by parsing Ordered listing syntax for generating HTML:
+                # Improve markdown2html.py by parsing
+                # Ordered listing syntax for generating HTML:
                 # Syntax: (you can assume it will be strictly this syntax)
                 # Markdown:
                 # * Hello
@@ -83,10 +84,9 @@ if __name__ == "__main__":
                     if in_ol_list:
                         html_f.write('</ol>\n')
                         in_ol_list = False
-                
                 html_f.write(line)
             # Close the list if the file ends while in_list is True
-             # Close any open lists at the end of the file
+            # Close any open lists at the end of the file
             if in_ul_list:
                 html_f.write('</ul>\n')
             if in_ol_list:
